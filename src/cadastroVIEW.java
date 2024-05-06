@@ -1,3 +1,7 @@
+
+import java.awt.HeadlessException;
+import javax.swing.JOptionPane;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -140,16 +144,30 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        ProdutosDTO produto = new ProdutosDTO();
-        String nome = cadastroNome.getText();
-        String valor = cadastroValor.getText();
-        String status = "A Venda";
-        produto.setNome(nome);
-        produto.setValor(Integer.parseInt(valor));
-        produto.setStatus(status);
         
-        ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.cadastrarProduto(produto);
+        ProdutosDTO produto = new ProdutosDTO();
+        try {
+            
+            String nome = cadastroNome.getText();
+            String valor = cadastroValor.getText();
+            String status = "A Venda";
+            produto.setNome(nome);
+            produto.setValor(Integer.parseInt(valor));
+            produto.setStatus(status);
+
+            ProdutosDAO produtodao = new ProdutosDAO();
+            boolean ok = produtodao.cadastrarProduto(produto);
+            if(ok){
+                JOptionPane.showConfirmDialog(this, "Produto adicionado com sucesso!" );
+                cadastroNome.setText("");
+                cadastroValor.setText("");
+            }else {
+                JOptionPane.showConfirmDialog(this, "Erro ao adicionar o produto!" );
+            }
+        } catch (HeadlessException | NumberFormatException e){
+            JOptionPane.showConfirmDialog(this, "Erro ao adicionar o produto!" );
+        }
+
         
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -161,7 +179,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void start(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
